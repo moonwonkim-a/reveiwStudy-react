@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const spanStyle = {
+            color: 'orange',
+            fontSize: 40
+        }
+        
+        // 자식 컴포넌트
+        function Child({name = '강백호',sport = '유도',children}){
+
+            return (
+                <>
+                    <h1>내이름은 {name}</h1>
+                    <h2><span style={spanStyle}>{sport}</span>를 좋아하지.</h2>
+                    <p>{children}</p>
+                </>
+            )
+        }        
+
+
+        function Parent(){
+            const name1 = '김문원'
+            return(
+                <>
+                    <Child name={name1} sport='농구'>
+                        만나서 반가워!!
+                    </Child>
+                    <hr/>
+                    <Child/>
+                </>
+            )
+
+        }
+
+        function App(){
+            return(
+                <>
+                    <Parent/>
+                </>
+            )
+        }
+
+
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+    </script>
+</body>
+</html>
