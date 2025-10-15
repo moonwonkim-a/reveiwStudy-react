@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        const {useState} = React;
+
+        function IconItem({ item, onClick, isSelected }) {
+            return (
+                <div
+                key={item.id}
+                onClick={() => onClick(item.id)} // 전달받은 onClick 함수 실행 (부모의 상태를 변경)
+                style={{
+                    cursor: 'pointer',
+                    fontSize: '40px',
+                    padding: '10px 20px',
+                    border: isSelected ? '3px solid red' : '1px solid gray', // 선택 여부에 따라 스타일 변경
+                    borderRadius: '5px'
+                }}
+                >
+                {item.icon}
+                </div>
+            );
+        };
+
+        const ITEMS = [
+        { id: 1, icon: '🏠', title: '집 정보' },
+        { id: 2, icon: '🚗', title: '차량 정보' },
+        { id: 3, icon: '💡', title: '아이디어 노트' },
+        ];
+
+        function ItemListAndDetail() {
+            const [selectedItemId, setSelectedItemId] = useState(null);
+
+            // 이 함수를 자식 컴포넌트(IconItem)에 props로 전달합니다.
+            const handleItemClick = (itemId) => {
+                setSelectedItemId(itemId);
+            };
+
+            const selectedItem = ITEMS.find(item => item.id === selectedItemId);
+
+                return (
+                    <div style={{ padding: '20px' }}>
+                    
+                    {/* A. 상단 영역: 상세 페이지 */}
+                    <div style={{ minHeight: '150px', border: '1px dashed gray', padding: '10px', marginBottom: '30px' }}>
+                        <h2>상단 상세 정보 공간</h2>
+                        
+                        {selectedItem ? (
+                        <div style={{ border: '1px solid black', padding: '15px', backgroundColor: '#e0f7fa' }}>
+                            <h3>선택된 항목: {selectedItem.icon} {selectedItem.title}</h3>
+                            <p>ID: {selectedItem.id}에 대한 상세 정보가 표시됩니다.</p>
+                            <button onClick={() => setSelectedItemId(null)}>상세 페이지 숨기기</button>
+                        </div>
+                        ) : (
+                        <p>아이콘을 클릭하면 여기에 상세 정보가 나타납니다.</p>
+                        )}
+                    </div>
+
+                    {/* B. 하단 영역: 아이콘 목록 (자식 컴포넌트를 렌더링) */}
+                    <div style={{ display: 'flex', gap: '20px', borderTop: '1px solid #ccc', paddingTop: '20px' }}>
+                        {ITEMS.map((item) => (
+                        <IconItem 
+                            key={item.id}
+                            item={item} // 1. 아이템 데이터 객체 전달
+                            onClick={handleItemClick} // 2. 클릭 이벤트 핸들러 함수 전달
+                            isSelected={selectedItemId === item.id} // 3. 선택 여부 Bool 값 전달
+                        />
+                        ))}
+                    </div>
+                    </div>
+                );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<ItemListAndDetail/>);
+    </script>
+</body>
+</html>
